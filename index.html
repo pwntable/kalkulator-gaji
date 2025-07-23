@@ -44,11 +44,11 @@
     .btn-red{background:#fff;color:#d93c3c;border:1.5px solid #d93c3c;}
     .btn-red:hover{background:#ffeaea;}
     .output{
-      margin-top:28px;background:#f6f8fa;padding:22px;border-radius:14px;
+      background:#f6f8fa;padding:22px;border-radius:14px;
       box-shadow:0 2px 8px #6fcaca08;
     }
     .output-title{font-size:1.12em;font-weight:600;margin-bottom:14px;}
-    .rowx{display:flex;justify-content:space-between;margin: 2.5px 0;}
+    .rowx{display:flex;justify-content:space-between;margin:2.5px 0;}
     .rowx.bold{font-weight:600;}
     hr{border:0;border-top:1px solid #ececec;margin:15px 0 13px 0;}
     .perincian-ot{margin-top:7px;}
@@ -57,51 +57,71 @@
       color:#d93c3c;
       font-size:.97em;
       margin-top:8px;
-      margin-bottom:-3px;
       min-height:18px;
       display:block;
     }
-    @media (max-width: 500px) {
-      .container{margin:0;min-height:unset;box-shadow:none;border-radius:0;}
+    /* Result view and Back btn */
+    #result-view { display:none; }
+    .btn-back{
+      margin-top:18px;
+      width:100%;
+      background:#fff;
+      color:#31d0aa;
+      border:1.5px solid #31d0aa;
+      border-radius:8px;
+      font-size:1rem;
+      font-weight:600;
+      cursor:pointer;
+      padding:11px 0;
+      transition:.17s;
     }
-    @media print {
-      body * {visibility: hidden !important;}
-      #printable, #printable * {visibility: visible !important;}
-      #printable {position:absolute;left:0;top:0;width:100%!important;background:#fff;padding:0;z-index:10;}
-      .output {background: #fff; box-shadow:none;}
+    .btn-back:hover{
+      background:#dcfaef;
     }
+    @media (max-width:500px){.container{margin:0;min-height:unset;box-shadow:none;border-radius:0;}}
   </style>
 </head>
 <body>
 <div class="container">
-  <h2>Kalkulator Gaji Bulanan</h2>
-  <form id="formGaji" onsubmit="kiraGaji(event)" autocomplete="off" novalidate>
-    <label>
-      <span class="input-label">Gaji Asas <span class="required-star">*</span></span>
-      <input type="number" required id="gajiBasic" min="1" placeholder="Enter Amount Salary" autocomplete="off" oninput="semakGajiBasic()">
-      <span id="basicError" class="error-msg"></span>
-    </label>
-    <label>
-      <span class="input-label">Jam OT 1.5X</span>
-      <input type="number" id="ot15" min="0" autocomplete="off">
-    </label>
-    <label>
-      <span class="input-label">Jam OT 2X</span>
-      <input type="number" id="ot2" min="0" autocomplete="off">
-    </label>
-    <label>
-      <span class="input-label">Jam OT 3X</span>
-      <input type="number" id="ot3" min="0" autocomplete="off">
-    </label>
-    <div class="btn-group">
-      <button type="submit" class="btn-green">Kira</button>
-      <button type="button" class="btn-red" onclick="resetForm()">Padam</button>
-    </div>
-  </form>
-  <div id="hasil"></div>
+  <!-- FORM VIEW -->
+  <div id="form-view">
+    <h2>Kalkulator Gaji Bulanan</h2>
+    <form id="formGaji" autocomplete="off" novalidate>
+      <label>
+        <span class="input-label">Gaji Asas <span class="required-star">*</span></span>
+        <input type="number" required id="gajiBasic" min="1" placeholder="Enter Amount Salary" autocomplete="off" oninput="semakGajiBasic()">
+        <span id="basicError" class="error-msg"></span>
+      </label>
+      <label>
+        <span class="input-label">Jam OT 1.5X</span>
+        <input type="number" id="ot15" min="0" autocomplete="off">
+      </label>
+      <label>
+        <span class="input-label">Jam OT 2X</span>
+        <input type="number" id="ot2" min="0" autocomplete="off">
+      </label>
+      <label>
+        <span class="input-label">Jam OT 3X</span>
+        <input type="number" id="ot3" min="0" autocomplete="off">
+      </label>
+      <div class="btn-group">
+        <button type="submit" class="btn-green">Kira</button>
+        <button type="button" class="btn-red" onclick="resetForm()">Padam</button>
+      </div>
+    </form>
+  </div>
+  <!-- RESULT VIEW -->
+  <div id="result-view"></div>
 </div>
-<div id="printable" style="display:none"></div>
+
 <script>
+let lastInput = {
+    gajiBasic: "",
+    ot15: "",
+    ot2: "",
+    ot3: ""
+};
+
 function semakGajiBasic() {
   let basicInput = document.getElementById('gajiBasic');
   let errorMsg = document.getElementById('basicError');
@@ -122,104 +142,110 @@ function semakGajiBasic() {
   }
 }
 
-function kiraGaji(e) {
-  if (e) e.preventDefault();
+document.getElementById('formGaji').addEventListener('submit', function(e){
+    e.preventDefault();
+    if(!semakGajiBasic()){
+        document.getElementById('gajiBasic').focus();
+        return false;
+    }
+    // Simpan input
+    lastInput.gajiBasic = document.getElementById('gajiBasic').value;
+    lastInput.ot15 = document.getElementById('ot15').value;
+    lastInput.ot2  = document.getElementById('ot2').value;
+    lastInput.ot3  = document.getElementById('ot3').value;
 
-  if (!semakGajiBasic()) {
+    // Kira
+    let gajiBasic = parseFloat(lastInput.gajiBasic || 0);
+    let ot15 = parseFloat(lastInput.ot15 || 0);
+    let ot2 = parseFloat(lastInput.ot2 || 0);
+    let ot3 = parseFloat(lastInput.ot3 || 0);
+
+    let gajiHari = gajiBasic / 26;
+    let gajiJam = gajiHari / 8;
+
+    let otAmt1 = gajiJam * 1.5 * ot15;
+    let otAmt2 = gajiJam * 2.0 * ot2;
+    let otAmt3 = gajiJam * 3.0 * ot3;
+    let jumlahOT = otAmt1 + otAmt2 + otAmt3;
+
+    let gajiKasar = gajiBasic + jumlahOT;
+
+    let epfPekerja = gajiKasar * 0.11;
+    let epfMajikan = gajiKasar * 0.13;
+    let socsoPekerja = gajiKasar * 0.005;
+    let sipPekerja = gajiKasar * 0.002;
+    let sipMajikan = gajiKasar * 0.002;
+    let gajiBersih = gajiKasar - (epfPekerja + socsoPekerja + sipPekerja);
+
+    // Papar result dan hide form
+    document.getElementById('form-view').style.display = 'none';
+    document.getElementById('result-view').innerHTML = `
+      <div class="output">
+        <div class="output-title">Gaji Kasar <span style="float:right">RM${gajiKasar.toFixed(2)}</span></div>
+        <hr>
+        <div class="rowx bold" style="margin-bottom:2px;">Pecahan Jumlah Caruman*</div>
+        <div class="rowx"><span>KWSP / EPF (Pekerja)</span> <span>RM${epfPekerja.toFixed(2)}</span></div>
+        <div class="rowx"><span>KWSP / EPF (Majikan)</span> <span>RM${epfMajikan.toFixed(2)}</span></div>
+        <div class="rowx bold"><span>Jumlah KWSP / EPF</span> <span>RM${(epfPekerja+epfMajikan).toFixed(2)}</span></div>
+        <div class="rowx" style="margin-top:12px;"><span>PERKESO / SOCSO (Pekerja)</span> <span>RM${socsoPekerja.toFixed(2)}</span></div>
+        <div class="rowx bold"><span>Jumlah PERKESO / SOCSO</span> <span>RM${socsoPekerja.toFixed(2)}</span></div>
+        <div class="rowx" style="margin-top:12px;"><span>SIP / EIS (Pekerja)</span> <span>RM${sipPekerja.toFixed(2)}</span></div>
+        <div class="rowx"><span>SIP / EIS (Majikan)</span> <span>RM${sipMajikan.toFixed(2)}</span></div>
+        <div class="rowx bold"><span>Jumlah SIP / EIS</span> <span>RM${(sipPekerja+sipMajikan).toFixed(2)}</span></div>
+        <hr>
+        <div class="rowx bold">Perincian OT</div>
+        <div class="perincian-ot">
+          <div class="rowx"><span>OT 1.5x</span> <span>${ot15} jam = RM${otAmt1.toFixed(2)}</span></div>
+          <div class="rowx"><span>OT 2.0x</span> <span>${ot2} jam = RM${otAmt2.toFixed(2)}</span></div>
+          <div class="rowx"><span>OT 3.0x</span> <span>${ot3} jam = RM${otAmt3.toFixed(2)}</span></div>
+        </div>
+        <div class="rowx summary"><span>Jumlah Nilai Gaji OT</span> <span>RM${jumlahOT.toFixed(2)}</span></div>
+        <div class="rowx summary" style="color:#175e36;"><span>Gaji Bersih</span> <span>RM${gajiBersih.toFixed(2)}</span></div>
+        <hr>
+        <button onclick="doPrint()" type="button" class="btn-green" style="width:100%;">Cetak</button>
+        <button onclick="showFormAgain()" type="button" class="btn-back">Kembali ke Borang</button>
+      </div>
+    `;
+    document.getElementById('result-view').style.display = 'block';
+});
+
+function showFormAgain(){
+    document.getElementById('result-view').style.display = 'none';
+    document.getElementById('form-view').style.display = 'block';
+    // Masukkan balik value sebelum ni!
+    document.getElementById('gajiBasic').value = lastInput.gajiBasic;
+    document.getElementById('ot15').value = lastInput.ot15;
+    document.getElementById('ot2').value  = lastInput.ot2;
+    document.getElementById('ot3').value  = lastInput.ot3;
+    // Fokus ke input gaji semula
     document.getElementById('gajiBasic').focus();
-    document.getElementById('hasil').innerHTML = '';
-    return false;
-  }
-
-  let gajiBasic = parseFloat(document.getElementById('gajiBasic').value || 0);
-  let ot15 = parseFloat(document.getElementById('ot15').value || 0);
-  let ot2 = parseFloat(document.getElementById('ot2').value || 0);
-  let ot3 = parseFloat(document.getElementById('ot3').value || 0);
-
-  let gajiHari = gajiBasic / 26;
-  let gajiJam = gajiHari / 8;
-
-  let otAmt1 = gajiJam * 1.5 * ot15;
-  let otAmt2 = gajiJam * 2.0 * ot2;
-  let otAmt3 = gajiJam * 3.0 * ot3;
-  let jumlahOT = otAmt1 + otAmt2 + otAmt3;
-
-  let gajiKasar = gajiBasic + jumlahOT;
-
-  let epfPekerja = gajiKasar * 0.11;
-  let epfMajikan = gajiKasar * 0.13;
-  let socsoPekerja = gajiKasar * 0.005;
-  let sipPekerja = gajiKasar * 0.002;
-  let sipMajikan = gajiKasar * 0.002;
-  let gajiBersih = gajiKasar - (epfPekerja + socsoPekerja + sipPekerja);
-
-  document.getElementById('hasil').innerHTML = `
-    <div class="output">
-      <div class="output-title">Gaji Kasar <span style="float:right">RM${gajiKasar.toFixed(2)}</span></div>
-      <hr>
-      <div class="rowx bold" style="margin-bottom:2px;">Pecahan Jumlah Caruman*</div>
-      <div class="rowx"><span>KWSP / EPF (Pekerja)</span> <span>RM${epfPekerja.toFixed(2)}</span></div>
-      <div class="rowx"><span>KWSP / EPF (Majikan)</span> <span>RM${epfMajikan.toFixed(2)}</span></div>
-      <div class="rowx bold"><span>Jumlah KWSP / EPF</span> <span>RM${(epfPekerja+epfMajikan).toFixed(2)}</span></div>
-      <div class="rowx" style="margin-top:12px;"><span>PERKESO / SOCSO (Pekerja)</span> <span>RM${socsoPekerja.toFixed(2)}</span></div>
-      <div class="rowx bold"><span>Jumlah PERKESO / SOCSO</span> <span>RM${socsoPekerja.toFixed(2)}</span></div>
-      <div class="rowx" style="margin-top:12px;"><span>SIP / EIS (Pekerja)</span> <span>RM${sipPekerja.toFixed(2)}</span></div>
-      <div class="rowx"><span>SIP / EIS (Majikan)</span> <span>RM${sipMajikan.toFixed(2)}</span></div>
-      <div class="rowx bold"><span>Jumlah SIP / EIS</span> <span>RM${(sipPekerja+sipMajikan).toFixed(2)}</span></div>
-      <hr>
-      <div class="rowx bold">Perincian OT</div>
-      <div class="perincian-ot">
-        <div class="rowx"><span>OT 1.5x</span> <span>${ot15} jam = RM${otAmt1.toFixed(2)}</span></div>
-        <div class="rowx"><span>OT 2.0x</span> <span>${ot2} jam = RM${otAmt2.toFixed(2)}</span></div>
-        <div class="rowx"><span>OT 3.0x</span> <span>${ot3} jam = RM${otAmt3.toFixed(2)}</span></div>
-      </div>
-      <div class="rowx summary"><span>Jumlah Nilai Gaji OT</span> <span>RM${jumlahOT.toFixed(2)}</span></div>
-      <div class="rowx summary" style="color:#175e36;"><span>Gaji Bersih</span> <span>RM${gajiBersih.toFixed(2)}</span></div>
-      <hr>
-      <button onclick="doPrint()" type="button" class="btn-green" style="width:100%;">Cetak</button>
-    </div>
-  `;
-
-  document.getElementById('printable').innerHTML = `
-    <div class="output">
-      <div class="output-title">Gaji Kasar <span style="float:right">RM${gajiKasar.toFixed(2)}</span></div>
-      <hr>
-      <div class="rowx bold" style="margin-bottom:2px;">Pecahan Jumlah Caruman*</div>
-      <div class="rowx"><span>KWSP / EPF (Pekerja)</span> <span>RM${epfPekerja.toFixed(2)}</span></div>
-      <div class="rowx"><span>KWSP / EPF (Majikan)</span> <span>RM${epfMajikan.toFixed(2)}</span></div>
-      <div class="rowx bold"><span>Jumlah KWSP / EPF</span> <span>RM${(epfPekerja+epfMajikan).toFixed(2)}</span></div>
-      <div class="rowx" style="margin-top:12px;"><span>PERKESO / SOCSO (Pekerja)</span> <span>RM${socsoPekerja.toFixed(2)}</span></div>
-      <div class="rowx bold"><span>Jumlah PERKESO / SOCSO</span> <span>RM${socsoPekerja.toFixed(2)}</span></div>
-      <div class="rowx" style="margin-top:12px;"><span>SIP / EIS (Pekerja)</span> <span>RM${sipPekerja.toFixed(2)}</span></div>
-      <div class="rowx"><span>SIP / EIS (Majikan)</span> <span>RM${sipMajikan.toFixed(2)}</span></div>
-      <div class="rowx bold"><span>Jumlah SIP / EIS</span> <span>RM${(sipPekerja+sipMajikan).toFixed(2)}</span></div>
-      <hr>
-      <div class="rowx bold">Perincian OT</div>
-      <div class="perincian-ot">
-        <div class="rowx"><span>OT 1.5x</span> <span>${ot15} jam = RM${otAmt1.toFixed(2)}</span></div>
-        <div class="rowx"><span>OT 2.0x</span> <span>${ot2} jam = RM${otAmt2.toFixed(2)}</span></div>
-        <div class="rowx"><span>OT 3.0x</span> <span>${ot3} jam = RM${otAmt3.toFixed(2)}</span></div>
-      </div>
-      <div class="rowx summary"><span>Jumlah Nilai Gaji OT</span> <span>RM${jumlahOT.toFixed(2)}</span></div>
-      <div class="rowx summary" style="color:#175e36;"><span>Gaji Bersih</span> <span>RM${gajiBersih.toFixed(2)}</span></div>
-    </div>
-  `;
-  document.getElementById('printable').style.display = "none";
 }
 
 function doPrint() {
-  document.getElementById('printable').style.display = "block";
-  setTimeout(function(){
-    window.print();
-    document.getElementById('printable').style.display = "none";
-  }, 100);
+  // Cetak output sahaja
+  let myWindow = window.open('', '', 'width=500,height=600');
+  let content = document.querySelector('.output').outerHTML;
+  myWindow.document.write(`
+    <html><head><title>Cetak Gaji Bulanan</title>
+    <style>
+    body{font-family:Arial,sans-serif;}
+    .output{max-width:390px;margin:40px auto;padding:22px 20px 18px 20px;background:#fff;border-radius:14px;box-shadow:0 2px 8px #6fcaca08;}
+    .output-title{font-size:1.18em;font-weight:600;margin-bottom:14px;}
+    .rowx{display:flex;justify-content:space-between;margin: 2.5px 0;}
+    .rowx.bold{font-weight:600;}
+    .summary{font-weight:600;margin:11px 0 3px 0;}
+    </style>
+    </head><body>${content}</body></html>
+  `);
+  myWindow.document.close();
+  myWindow.focus();
+  myWindow.print();
+  setTimeout(() => myWindow.close(), 500);
 }
 
 function resetForm() {
   document.getElementById('formGaji').reset();
-  document.getElementById('hasil').innerHTML = '';
-  document.getElementById('printable').innerHTML = '';
-  document.getElementById('printable').style.display = "none";
+  lastInput = { gajiBasic:'', ot15:'', ot2:'', ot3:'' };
   document.getElementById('basicError').textContent = '';
 }
 </script>
