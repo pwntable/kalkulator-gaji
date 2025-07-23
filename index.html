@@ -60,7 +60,6 @@
       min-height:18px;
       display:block;
     }
-    /* Result view and Back btn */
     #result-view { display:none; }
     .btn-back{
       margin-top:18px;
@@ -202,6 +201,8 @@ document.getElementById('formGaji').addEventListener('submit', function(e){
         <div class="rowx summary"><span>Jumlah Nilai Gaji OT</span> <span>RM${jumlahOT.toFixed(2)}</span></div>
         <div class="rowx summary" style="color:#175e36;"><span>Gaji Bersih</span> <span>RM${gajiBersih.toFixed(2)}</span></div>
         <hr>
+        <button onclick="doPrint()" type="button" class="btn-green" style="width:100%;">Cetak</button>
+        <button onclick="showFormAgain()" type="button" class="btn-back">Kembali ke Borang</button>
       </div>
     `;
     document.getElementById('result-view').style.display = 'block';
@@ -220,9 +221,13 @@ function showFormAgain(){
 }
 
 function doPrint() {
-  // Cetak output sahaja
+  // Sediakan versi output tanpa butang
+  let output = document.querySelector('.output').cloneNode(true);
+  // Buang butang (cari & remove)
+  let btns = output.querySelectorAll('button');
+  btns.forEach(btn => btn.remove());
+
   let myWindow = window.open('', '', 'width=500,height=600');
-  let content = document.querySelector('.output').outerHTML;
   myWindow.document.write(`
     <html><head><title>Cetak Gaji Bulanan</title>
     <style>
@@ -233,7 +238,7 @@ function doPrint() {
     .rowx.bold{font-weight:600;}
     .summary{font-weight:600;margin:11px 0 3px 0;}
     </style>
-    </head><body>${content}</body></html>
+    </head><body>${output.outerHTML}</body></html>
   `);
   myWindow.document.close();
   myWindow.focus();
