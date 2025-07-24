@@ -2,24 +2,32 @@
 <html lang="ms">
 <head>
   <meta charset="UTF-8">
-  <title>Kalkulator Gaji</title>
+  <title>Kalkulator Gaji Bulanan</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     html,body{margin:0;padding:0;background:#f6f6f8;font-family:'Inter',Arial,sans-serif;color:#212432;}
     .container{
-      max-width:400px;margin:50px auto;padding:24px 22px 20px 22px;
+      max-width:410px;
+      margin:50px auto;
+      padding:24px 22px 20px 22px;
       background:#fff;border-radius:18px;box-shadow:0 2px 12px #26296e09;
       min-height:250px;
     }
     h2{margin:0 0 24px 0;font-weight:500;letter-spacing:-.8px;text-align:center;}
-    form{display:flex;flex-direction:column;gap:16px;margin-bottom:8px;}
+    form{display:flex;flex-direction:column;gap:18px;margin-bottom:8px;}
+
     label{
-      display:flex;flex-direction:column;font-size:1rem;font-weight:400;gap:6px;color:#444;
+      display:flex;
+      flex-direction:column;
+      font-size:1rem;
+      font-weight:500;
+      gap:6px;
+      color:#444;
     }
     .input-label {
       display: inline-block;
       margin-bottom: 2px;
-      font-weight: 400;
+      font-weight: 600;
     }
     .required-star {
       color: #d93c3c;
@@ -27,16 +35,30 @@
       margin-left:2px;
       font-size: 1.1em;
     }
-    input[type=number]{
-      padding:10px;border:1px solid #e6e7ee;border-radius:8px;
-      outline:#307d7b2f; font-size:1rem; transition:.2s;
+    input[type=number], input[type=text]{
+      padding:10px 12px;
+      border:1.5px solid #e2e3e4;
+      border-radius:8px;
+      outline:none;
+      font-size:1rem;
+      transition: border .15s, box-shadow .17s;
       background: #f6f8fa;
+      box-shadow: 0 1px 5px #0001;
     }
-    input[type=number]:focus {border:1.5px solid #43b7a9;background:#fff;}
-    .btn-group{display:flex;gap:12px;}
+    input[type=number]:focus, input[type=text]:focus {
+      border: 1.5px solid #31d0aa;
+      background: #fff;
+      box-shadow: 0 0 0 2px #31d0aa33;
+    }
+    .btn-group{
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      margin-top: 10px;
+    }
     button{
-      border:none;outline:none;min-width:90px;padding:11px 0;
-      border-radius:8px;font-size:1rem;cursor:pointer;font-weight:500;
+      border:none;outline:none;min-width:130px;padding:13px 0;
+      border-radius:8px;font-size:1.04em;cursor:pointer;font-weight:600;
       transition:background .15s;
     }
     .btn-green{background:#31d0aa;color:#fff;}
@@ -77,43 +99,57 @@
     .btn-back:hover{
       background:#dcfaef;
     }
-    /* Night Shift styling */
+
+    /* Night Shift styling improved */
     .nightshift-section {
-      background:#111;padding:20px 14px 22px 14px;border-radius:16px;margin-top:14px;margin-bottom:8px;
+      background:#23272f;
+      color:#fff;
+      border-radius:16px;
+      padding: 19px 15px 20px 15px;
+      margin-top:14px;
+      margin-bottom:8px;
+      box-shadow: 0 1px 8px #0002;
     }
     .nightshift-label {
-      color:#fff;font-size:1.18rem;font-weight:600;margin-bottom:16px;display:block;
+      color:#fff;font-size:1.19rem;font-weight:700;margin-bottom:18px;display:block; letter-spacing: -.5px;
     }
     .nightshift-group {
-      display:flex;gap:18px;flex-wrap:wrap;
+      display:flex;gap:18px;flex-wrap:wrap;margin-bottom:4px;
     }
     .nightshift-col {
-      flex:1;min-width:135px;
+      flex:1;min-width:135px;display:flex;flex-direction:column;gap:4px;
+    }
+    .nightsmall-label {
+      font-size: .98em;
+      font-weight: 500;
+      color: #f0f7fc;
+      margin-left: 2px;
+      margin-bottom: -1px;
+      display: block;
     }
     .nightshift-input {
-      width:100%;padding:26px 12px;font-size:1.12rem;border-radius:28px;text-align:center;
-      border:none;box-sizing:border-box;margin-bottom:3px;
+      background: #283040;
+      color: #fff;
+      border: 1.5px solid #3cc7ae;
+      box-shadow: 0 1px 5px #0003;
+      border-radius:8px;
+      margin-bottom:1px;
+      padding:10px 12px;
+      font-size:1rem;
     }
+    .nightshift-input:focus { background: #fff; color: #23272f;}
     .night-error {
       display:block;min-height:16px;color:#ff7070;font-size:0.98em;
       margin-bottom:0;
-      margin-top:3px;
+      margin-top:2px;
     }
-    /* RESPONSIVE NIGHT SHIFT: Stack & smaller padding on mobile */
-@media (max-width: 600px) {
-  .nightshift-group {
-    flex-direction: column;
-    gap: 10px;
-  }
-  .nightshift-col {
-    min-width: 0;
-  }
-  .nightshift-input {
-    padding: 16px 10px;
-    font-size: 1.04rem;
-    border-radius: 16px;
-  }
-}
+    @media (max-width:600px) {
+      .nightshift-group { flex-direction: column; gap: 9px;}
+      .nightshift-col { min-width: 0; }
+      .nightshift-section { padding:16px 4vw;}
+      .btn-group { flex-direction:column;}
+      button { width:100%; min-width:0;}
+    }
   </style>
 </head>
 <body>
@@ -124,46 +160,52 @@
     <form id="formGaji" autocomplete="off" novalidate>
       <label>
         <span class="input-label">Gaji Asas <span class="required-star">*</span></span>
-        <input type="number" required id="gajiBasic" min="1" placeholder="Enter Amount Salary" autocomplete="off" oninput="semakGajiBasic()">
+        <input type="number" required id="gajiBasic" min="1" placeholder="Enter Salary Amount" autocomplete="off" oninput="semakGajiBasic()">
         <span id="basicError" class="error-msg"></span>
       </label>
       <label>
         <span class="input-label">Jam OT 1.5X</span>
-        <input type="number" id="ot15" min="0" autocomplete="off">
+        <input type="number" id="ot15" min="0" autocomplete="off" placeholder="Total OT 1.5 hours">
       </label>
       <label>
         <span class="input-label">Jam OT 2X</span>
-        <input type="number" id="ot2" min="0" autocomplete="off">
+        <input type="number" id="ot2" min="0" autocomplete="off" placeholder="Total OT 2.0 hours">
       </label>
       <label>
         <span class="input-label">Jam OT 3X</span>
-        <input type="number" id="ot3" min="0" autocomplete="off">
+        <input type="number" id="ot3" min="0" autocomplete="off" placeholder="Total OT 3.0 hours">
       </label>
-      <!-- NIGHT SHIFT SECTION -->
+
+      <!-- NIGHT SHIFT SECTION (IMPROVED) -->
       <div class="nightshift-section">
-        <label class="nightshift-label">Night Shift</label>
+        <label class="nightshift-label">
+          <span style="font-size:1.2em;vertical-align:-3px;">🌙</span> Night Shift
+        </label>
         <div class="nightshift-group">
           <div class="nightshift-col">
+            <label class="nightsmall-label" for="nightRate">Kadar satu malam (RM)</label>
             <input type="number" 
                    id="nightRate" 
                    min="0" step="any"
-                   placeholder="Enter Rate Per Hour"
                    class="nightshift-input"
+                   placeholder="Enter Night Shift Rate (RM)"
                    oninput="validateNightShift()">
             <span id="nightRateError" class="night-error"></span>
           </div>
           <div class="nightshift-col">
+            <label class="nightsmall-label" for="nightDay">Bilangan hari night shift</label>
             <input type="number" 
                    id="nightDay" 
                    min="0" step="1"
-                   placeholder="Enter Day Of Night Shift"
                    class="nightshift-input"
+                   placeholder="Enter Total Night Shifts"
                    oninput="validateNightShift()">
             <span id="nightDayError" class="night-error"></span>
           </div>
         </div>
       </div>
       <!-- END NIGHT SHIFT -->
+
       <div class="btn-group">
         <button type="submit" class="btn-green">Kira</button>
         <button type="button" class="btn-red" onclick="resetForm()">Padam</button>
@@ -212,11 +254,11 @@ function validateNightShift() {
   let rateError = "", dayError = "";
 
   if (rate && !day) {
-    dayError = "Wajib isi Day of Night Shift";
+    dayError = "Wajib isi Bilangan Hari";
     isValid = false;
   }
   if (day && !rate) {
-    rateError = "Wajib isi Rate Per Hour";
+    rateError = "Wajib isi Kadar satu malam";
     isValid = false;
   }
 
@@ -263,7 +305,8 @@ document.getElementById('formGaji').addEventListener('submit', function(e){
     let otAmt3 = gajiJam * 3.0 * ot3;
     let jumlahOT = otAmt1 + otAmt2 + otAmt3;
 
-    let nightTotal = (nightRate && nightDay) ? (nightRate * nightDay * 8) : 0;
+    // -- NIGHT SHIFT CALCULATION --
+    let nightTotal = (nightRate && nightDay) ? (nightRate * nightDay) : 0;
 
     let gajiKasar = gajiBasic + jumlahOT + nightTotal;
 
@@ -281,15 +324,18 @@ document.getElementById('formGaji').addEventListener('submit', function(e){
         <div class="output-title">Gaji Kasar <span style="float:right">RM${gajiKasar.toFixed(2)}</span></div>
         <hr>
         <div class="rowx bold" style="margin-bottom:2px;">Pecahan Jumlah Caruman*</div>
-        <div class="rowx"><span>KWSP / EPF (Pekerja)</span> <span>RM${epfPekerja.toFixed(2)}</span></div>
-        <div class="rowx"><span>KWSP / EPF (Majikan)</span> <span>RM${epfMajikan.toFixed(2)}</span></div>
+        <div class="rowx"><span>KWSP / EPF (Pekerja 11%)</span> <span>RM${epfPekerja.toFixed(2)}</span></div>
+        <div class="rowx"><span>KWSP / EPF (Majikan 13%)</span> <span>RM${epfMajikan.toFixed(2)}</span></div>
         <div class="rowx bold"><span>Jumlah KWSP / EPF</span> <span>RM${(epfPekerja+epfMajikan).toFixed(2)}</span></div>
-        <div class="rowx" style="margin-top:12px;"><span>PERKESO / SOCSO (Pekerja)</span> <span>RM${socsoPekerja.toFixed(2)}</span></div>
+        <div class="rowx" style="margin-top:12px;"><span>PERKESO / SOCSO (Pekerja 0.5%)</span> <span>RM${socsoPekerja.toFixed(2)}</span></div>
         <div class="rowx bold"><span>Jumlah PERKESO / SOCSO</span> <span>RM${socsoPekerja.toFixed(2)}</span></div>
-        <div class="rowx" style="margin-top:12px;"><span>SIP / EIS (Pekerja)</span> <span>RM${sipPekerja.toFixed(2)}</span></div>
-        <div class="rowx"><span>SIP / EIS (Majikan)</span> <span>RM${sipMajikan.toFixed(2)}</span></div>
+        <div class="rowx" style="margin-top:12px;"><span>SIP / EIS (Pekerja 0.2%)</span> <span>RM${sipPekerja.toFixed(2)}</span></div>
+        <div class="rowx"><span>SIP / EIS (Majikan 0.2%)</span> <span>RM${sipMajikan.toFixed(2)}</span></div>
         <div class="rowx bold"><span>Jumlah SIP / EIS</span> <span>RM${(sipPekerja+sipMajikan).toFixed(2)}</span></div>
-        ${nightTotal > 0 ? `<div class="rowx" style="margin-top:12px;"><span>Elaun Night Shift</span><span>RM${nightTotal.toFixed(2)}</span></div>` : ""}
+        ${nightTotal > 0 ? `<div class="rowx" style="margin-top:12px;">
+    <span>Elaun Night Shift (${nightDay} hari)</span>
+    <span>RM${nightTotal.toFixed(2)}</span>
+</div>` : ""}
         <hr>
         <div class="rowx bold">Perincian OT</div>
         <div class="perincian-ot">
