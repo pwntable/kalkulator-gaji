@@ -44,10 +44,12 @@
       transition: border .15s, box-shadow .17s;
       background: #f6f8fa;
       box-shadow: 0 1px 5px #0001;
+      color: #212432;
     }
     input[type=number]:focus, input[type=text]:focus {
       border: 1.5px solid #31d0aa;
       background: #fff;
+      color: #212432;
       box-shadow: 0 0 0 2px #31d0aa33;
     }
     .btn-group{
@@ -136,17 +138,31 @@
       margin-bottom:1px;
       padding:10px 12px;
       font-size:1rem;
+      transition:background 0.15s,color 0.15s;
     }
-    .nightshift-input:focus { background: #fff; color: #23272f;}
+    .nightshift-input:focus {
+      background: #fff;
+      color: #23272f;
+    }
     .night-error {
       display:block;min-height:16px;color:#ff7070;font-size:0.98em;
       margin-bottom:0;
       margin-top:2px;
     }
-    @media (max-width:600px) {
-      .nightshift-group { flex-direction: column; gap: 9px;}
-      .nightshift-col { min-width: 0; }
-      .nightshift-section { padding:16px 4vw;}
+    /* RESPONSIVE NIGHT SHIFT: Stack & smaller padding on mobile */
+    @media (max-width: 600px) {
+      .nightshift-group {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .nightshift-col {
+        min-width: 0;
+      }
+      .nightshift-input {
+        padding: 16px 10px;
+        font-size: 1.04rem;
+        border-radius: 16px;
+      }
       .btn-group { flex-direction:column;}
       button { width:100%; min-width:0;}
     }
@@ -324,18 +340,18 @@ document.getElementById('formGaji').addEventListener('submit', function(e){
         <div class="output-title">Gaji Kasar <span style="float:right">RM${gajiKasar.toFixed(2)}</span></div>
         <hr>
         <div class="rowx bold" style="margin-bottom:2px;">Pecahan Jumlah Caruman*</div>
-        <div class="rowx"><span>KWSP / EPF (Pekerja 11%)</span> <span>RM${epfPekerja.toFixed(2)}</span></div>
-        <div class="rowx"><span>KWSP / EPF (Majikan 13%)</span> <span>RM${epfMajikan.toFixed(2)}</span></div>
+        <div class="rowx"><span>KWSP / EPF (Pekerja)</span> <span>RM${epfPekerja.toFixed(2)}</span></div>
+        <div class="rowx"><span>KWSP / EPF (Majikan)</span> <span>RM${epfMajikan.toFixed(2)}</span></div>
         <div class="rowx bold"><span>Jumlah KWSP / EPF</span> <span>RM${(epfPekerja+epfMajikan).toFixed(2)}</span></div>
-        <div class="rowx" style="margin-top:12px;"><span>PERKESO / SOCSO (Pekerja 0.5%)</span> <span>RM${socsoPekerja.toFixed(2)}</span></div>
+        <div class="rowx" style="margin-top:12px;"><span>PERKESO / SOCSO (Pekerja)</span> <span>RM${socsoPekerja.toFixed(2)}</span></div>
         <div class="rowx bold"><span>Jumlah PERKESO / SOCSO</span> <span>RM${socsoPekerja.toFixed(2)}</span></div>
-        <div class="rowx" style="margin-top:12px;"><span>SIP / EIS (Pekerja 0.2%)</span> <span>RM${sipPekerja.toFixed(2)}</span></div>
-        <div class="rowx"><span>SIP / EIS (Majikan 0.2%)</span> <span>RM${sipMajikan.toFixed(2)}</span></div>
+        <div class="rowx" style="margin-top:12px;"><span>SIP / EIS (Pekerja)</span> <span>RM${sipPekerja.toFixed(2)}</span></div>
+        <div class="rowx"><span>SIP / EIS (Majikan)</span> <span>RM${sipMajikan.toFixed(2)}</span></div>
         <div class="rowx bold"><span>Jumlah SIP / EIS</span> <span>RM${(sipPekerja+sipMajikan).toFixed(2)}</span></div>
         ${nightTotal > 0 ? `<div class="rowx" style="margin-top:12px;">
-    <span>Elaun Night Shift (${nightDay} hari)</span>
-    <span>RM${nightTotal.toFixed(2)}</span>
-</div>` : ""}
+            <span><b>Elaun Night Shift (${nightDay} hari)</b></span>
+            <span><b>RM${nightTotal.toFixed(2)}</b></span>
+        </div>` : ""}
         <hr>
         <div class="rowx bold">Perincian OT</div>
         <div class="perincian-ot">
