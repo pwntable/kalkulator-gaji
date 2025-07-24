@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
   <meta charset="UTF-8">
-  <title>Kalkulator Gaji • Minimalis</title>
+  <title>Kalkulator Gaji</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     html,body{margin:0;padding:0;background:#f6f6f8;font-family:'Inter',Arial,sans-serif;color:#212432;}
@@ -77,6 +77,28 @@
     .btn-back:hover{
       background:#dcfaef;
     }
+    /* Night Shift styling */
+    .nightshift-section {
+      background:#111;padding:20px 14px 22px 14px;border-radius:16px;margin-top:14px;margin-bottom:8px;
+    }
+    .nightshift-label {
+      color:#fff;font-size:1.18rem;font-weight:600;margin-bottom:16px;display:block;
+    }
+    .nightshift-group {
+      display:flex;gap:18px;flex-wrap:wrap;
+    }
+    .nightshift-col {
+      flex:1;min-width:135px;
+    }
+    .nightshift-input {
+      width:100%;padding:26px 12px;font-size:1.12rem;border-radius:28px;text-align:center;
+      border:none;box-sizing:border-box;margin-bottom:3px;
+    }
+    .night-error {
+      display:block;min-height:16px;color:#ff7070;font-size:0.98em;
+      margin-bottom:0;
+      margin-top:3px;
+    }
     @media (max-width:500px){.container{margin:0;min-height:unset;box-shadow:none;border-radius:0;}}
   </style>
 </head>
@@ -103,6 +125,31 @@
         <span class="input-label">Jam OT 3X</span>
         <input type="number" id="ot3" min="0" autocomplete="off">
       </label>
+      <!-- NIGHT SHIFT SECTION -->
+      <div class="nightshift-section">
+        <label class="nightshift-label">Night Shift</label>
+        <div class="nightshift-group">
+          <div class="nightshift-col">
+            <input type="number" 
+                   id="nightRate" 
+                   min="0" step="any"
+                   placeholder="Enter Rate Per Hour"
+                   class="nightshift-input"
+                   oninput="validateNightShift()">
+            <span id="nightRateError" class="night-error"></span>
+          </div>
+          <div class="nightshift-col">
+            <input type="number" 
+                   id="nightDay" 
+                   min="0" step="1"
+                   placeholder="Enter Day Of Night Shift"
+                   class="nightshift-input"
+                   oninput="validateNightShift()">
+            <span id="nightDayError" class="night-error"></span>
+          </div>
+        </div>
+      </div>
+      <!-- END NIGHT SHIFT -->
       <div class="btn-group">
         <button type="submit" class="btn-green">Kira</button>
         <button type="button" class="btn-red" onclick="resetForm()">Padam</button>
@@ -118,7 +165,9 @@ let lastInput = {
     gajiBasic: "",
     ot15: "",
     ot2: "",
-    ot3: ""
+    ot3: "",
+    nightRate: "",
+    nightDay: ""
 };
 
 function semakGajiBasic() {
@@ -141,23 +190,56 @@ function semakGajiBasic() {
   }
 }
 
+// Night Shift Validation
+function validateNightShift() {
+  const rate = document.getElementById('nightRate').value.trim();
+  const day = document.getElementById('nightDay').value.trim();
+  let isValid = true;
+  let rateError = "", dayError = "";
+
+  if (rate && !day) {
+    dayError = "Wajib isi Day of Night Shift";
+    isValid = false;
+  }
+  if (day && !rate) {
+    rateError = "Wajib isi Rate Per Hour";
+    isValid = false;
+  }
+
+  document.getElementById('nightRateError').textContent = rateError;
+  document.getElementById('nightDayError').textContent = dayError;
+  return isValid;
+}
+
 document.getElementById('formGaji').addEventListener('submit', function(e){
     e.preventDefault();
     if(!semakGajiBasic()){
         document.getElementById('gajiBasic').focus();
         return false;
     }
+    if (!validateNightShift()) {
+      // Fokus pada input night shift yang tak diisi
+      if (!document.getElementById('nightRate').value) 
+          document.getElementById('nightRate').focus();
+      else
+          document.getElementById('nightDay').focus();
+      return false;
+    }
     // Simpan input
     lastInput.gajiBasic = document.getElementById('gajiBasic').value;
     lastInput.ot15 = document.getElementById('ot15').value;
     lastInput.ot2  = document.getElementById('ot2').value;
     lastInput.ot3  = document.getElementById('ot3').value;
+    lastInput.nightRate = document.getElementById('nightRate').value;
+    lastInput.nightDay = document.getElementById('nightDay').value;
 
-    // Kira
+    // Parsing value
     let gajiBasic = parseFloat(lastInput.gajiBasic || 0);
     let ot15 = parseFloat(lastInput.ot15 || 0);
     let ot2 = parseFloat(lastInput.ot2 || 0);
     let ot3 = parseFloat(lastInput.ot3 || 0);
+    let nightRate = parseFloat(lastInput.nightRate || 0);
+    let nightDay = parseFloat(lastInput.nightDay || 0);
 
     let gajiHari = gajiBasic / 26;
     let gajiJam = gajiHari / 8;
@@ -167,7 +249,9 @@ document.getElementById('formGaji').addEventListener('submit', function(e){
     let otAmt3 = gajiJam * 3.0 * ot3;
     let jumlahOT = otAmt1 + otAmt2 + otAmt3;
 
-    let gajiKasar = gajiBasic + jumlahOT;
+    let nightTotal = (nightRate && nightDay) ? (nightRate * nightDay * 8) : 0;
+
+    let gajiKasar = gajiBasic + jumlahOT + nightTotal;
 
     let epfPekerja = gajiKasar * 0.11;
     let epfMajikan = gajiKasar * 0.13;
@@ -191,6 +275,7 @@ document.getElementById('formGaji').addEventListener('submit', function(e){
         <div class="rowx" style="margin-top:12px;"><span>SIP / EIS (Pekerja)</span> <span>RM${sipPekerja.toFixed(2)}</span></div>
         <div class="rowx"><span>SIP / EIS (Majikan)</span> <span>RM${sipMajikan.toFixed(2)}</span></div>
         <div class="rowx bold"><span>Jumlah SIP / EIS</span> <span>RM${(sipPekerja+sipMajikan).toFixed(2)}</span></div>
+        ${nightTotal > 0 ? `<div class="rowx" style="margin-top:12px;"><span>Elaun Night Shift</span><span>RM${nightTotal.toFixed(2)}</span></div>` : ""}
         <hr>
         <div class="rowx bold">Perincian OT</div>
         <div class="perincian-ot">
@@ -216,7 +301,8 @@ function showFormAgain(){
     document.getElementById('ot15').value = lastInput.ot15;
     document.getElementById('ot2').value  = lastInput.ot2;
     document.getElementById('ot3').value  = lastInput.ot3;
-    // Fokus ke input gaji semula
+    document.getElementById('nightRate').value = lastInput.nightRate;
+    document.getElementById('nightDay').value  = lastInput.nightDay;
     document.getElementById('gajiBasic').focus();
 }
 
@@ -248,8 +334,10 @@ function doPrint() {
 
 function resetForm() {
   document.getElementById('formGaji').reset();
-  lastInput = { gajiBasic:'', ot15:'', ot2:'', ot3:'' };
+  lastInput = { gajiBasic:'', ot15:'', ot2:'', ot3:'', nightRate:'', nightDay:'' };
   document.getElementById('basicError').textContent = '';
+  document.getElementById('nightRateError').textContent = '';
+  document.getElementById('nightDayError').textContent = '';
 }
 </script>
 </body>
