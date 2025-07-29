@@ -5,179 +5,197 @@
   <title>Kalkulator Gaji Bulanan</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #f6f6f8;
-      font-family: 'Inter', Arial, sans-serif;
-      color: #212432;
-    }
-    .container {
-      max-width: 410px;
-      margin: 50px auto;
-      padding: 24px 22px 20px;
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 2px 12px #26296e09;
-      min-height: 250px;
-    }
-    h2 {
-      margin: 0 0 24px 0;
-      font-weight: 500;
-      letter-spacing: -.8px;
-      text-align: center;
-    }
-    form {
-      display: flex; flex-direction: column; gap: 18px;
-    }
-    label {
-      display: flex;
-      flex-direction: column;
-      font-size: 1rem;
-      font-weight: 500;
-      gap: 6px;
-      color: #444;
-    }
-    .input-label {
-      display: inline-block; margin-bottom: 2px; font-weight: 600;
-    }
-    .required-star { color: #d93c3c; font-weight: bold; margin-left: 2px; font-size: 1.1em; }
-    input[type=number], input[type=text] {
-      padding: 10px 12px;
-      border: 1.5px solid #e2e3e4;
-      border-radius: 8px;
-      outline: none;
-      font-size: 1rem;
-      transition: border .2s, box-shadow .18s;
-      background: #f6f8fa;
-      color: #212432;
-      box-shadow: 0 1px 5px #0001;
-    }
-    input[type=number]:focus, input[type=text]:focus {
-      border: 1.5px solid #31d0aa;
-      background: #fff;
-      color: #212432;
-      box-shadow: 0 0 0 2px #31d0aa33;
-    }
-    .btn-group{ display:flex; gap:14px; justify-content:center; margin-top:10px;}
-    button {
-      border: none; outline: none; min-width: 130px; padding: 13px 0;
-      border-radius: 8px; font-size: 1.04em; cursor: pointer; font-weight: 600;
-      transition: background .15s, transform .12s, box-shadow 0.18s;
-    }
-    button:active { transform: scale(0.97);}
-    .btn-green { background: #31d0aa; color: #fff; }
-    .btn-green:hover { background: #26b99b; }
-    .btn-red { background: #fff; color: #d93c3c; border: 1.5px solid #d93c3c; }
-    .btn-red:hover { background: #ffeaea; }
+    /* ======= LAYOUT & STRUKTUR UTAMA ======= */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #f6f6f8;
+  font-family: 'Inter', Arial, sans-serif;
+  color: #212432;
+}
+.container {
+  max-width: 410px;
+  margin: 50px auto;
+  padding: 24px 22px 20px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px #26296e09;
+  min-height: 250px;
+}
+h2 {
+  margin: 0 0 24px 0;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  text-align: center;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
 
-    .output{
-      background: #f6f8fa; padding: 22px; border-radius: 14px;
-      box-shadow: 0 2px 8px #6fcaca08;
-    }
-    .output-title{font-size:1.12em;font-weight:600;margin-bottom:14px;}
-    .rowx{display:flex;justify-content:space-between;margin:2.5px 0;}
-    .rowx.bold{font-weight:600;}
-    .error-msg{color:#d93c3c;font-size:.97em;margin-top:8px;min-height:18px;display:block;}
+/* ======= INPUT + LABEL ======= */
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  font-weight: 500;
+  gap: 6px;
+  color: #444;
+}
+.input-label {
+  margin-bottom: 2px;
+  font-weight: 600;
+}
+.required-star {
+  color: #d93c3c;
+  font-weight: bold;
+  margin-left: 2px;
+  font-size: 1.1em;
+}
 
-    .btn-back{ margin-top:18px; width:100%; background:#fff; color:#31d0aa; border:1.5px solid #31d0aa; border-radius:8px; font-size:1rem; font-weight:600; cursor:pointer; padding:11px 0; transition:.17s; }
-    .btn-back:hover{ background:#dcfaef; }
+/* ======= FIELD INPUT ======= */
+input[type=number], input[type=text] {
+  padding: 10px 12px;
+  border: 1.5px solid #e2e3e4;
+  border-radius: 8px;
+  outline: none;
+  font-size: 1rem;
+  background: #f6f8fa;
+  color: #212432;
+  box-shadow: 0 1px 5px #0001;
+  transition: border .2s, box-shadow .18s;
+}
+input[type=number]:focus,
+input[type=text]:focus {
+  border: 1.5px solid #31d0aa;
+  background: #fff;
+  color: #212432;
+  box-shadow: 0 0 0 2px #31d0aa33;
+}
 
-    /* > > > OT/Night toggle button group < < < */
-    .toggle-row {margin-bottom:-6px;}
-    .toggle-labelQ { font-weight: 700; font-size: 1.07em; margin-bottom:8px;}
-    .toggle-btns { display:flex; gap:16px; margin:8px 0 0 0;}
-    .toggle-btn {
-      flex:1;
-      padding: 17px 0;
-      border-radius: 16px;
-      background: #dbdbdb;
-      color: #fff;
-      font-weight: 600;
-      font-size: 1.12em;
-      border: none;
-      outline: none;
-      cursor: pointer;
-      box-shadow: 0 1px 5px #0001;
-      /* For animasi/feedback */
-      transition: background .23s, color .18s, transform .12s;
-      margin-bottom:4px;
-    }
-    .toggle-btn.green {
-      background: #11ca66;
-      color: #fff;
-    }
-    .toggle-btn.red {
-      background: #ff4444;
-      color: #fff;
-    }
-    .toggle-btn.active {
-      filter: brightness(0.93) drop-shadow(0px 2px 8px #1e9b7050);
-      transform: scale(0.97);
-      box-shadow: 0 1px 7px #0002;
-      border: 2px solid #fff;
-      z-index:2;
-    }
-    /* Smooth slide-fade animasi */
-    .slide-fade-in {
-      animation: slideFadeIn .38s cubic-bezier(.42,1.35,.45,.97);
-    }
-    .slide-fade-out {
-      animation: slideFadeOut .3s cubic-bezier(.42,1.35,.45,.97);
-      pointer-events: none;
-    }
-    @keyframes slideFadeIn {
-      from { opacity:0; transform: translateY(16px);}
-      to   { opacity:1; transform: translateY(0);}
-    }
-    @keyframes slideFadeOut {
-      from {opacity:1; transform: translateY(0);}
-      to   {opacity:0; transform: translateY(18px);}
-    }
-    /* -- NIGHT SHIFT FORM -- */
-    .nightshift-section {
-      background:#23272f; color:#fff;
-      border-radius:16px;
-      padding: 19px 15px 20px 15px;
-      margin-top:14px;margin-bottom:8px;
-      box-shadow:0 1px 8px #0002;
-      animation: slideFadeIn .38s cubic-bezier(.42,1.35,.45,.97);
-    }
-    .nightshift-label {
-      color:#fff;font-size:1.19rem;font-weight:700;margin-bottom:18px;display:block; letter-spacing: -.5px;
-    }
-    .nightshift-group {
-      display:flex;gap:18px;flex-wrap:wrap;margin-bottom:4px;
-    }
-    .nightshift-col {
-      flex:1;min-width:135px;display:flex;flex-direction:column;gap:4px;
-    }
-    .nightsmall-label {
-      font-size: .98em;font-weight: 500;color: #f0f7fc;margin-left: 2px;margin-bottom: -1px;display: block;
-    }
-    .nightshift-input {
-      background: #283040;
-      color: #fff;
-      border: 1.5px solid #3cc7ae;
-      box-shadow: 0 1px 5px #0003;
-      border-radius:8px;
-      margin-bottom:1px;
-      padding:10px 12px;
-      font-size:1rem;
-      transition:background 0.15s,color 0.15s;
-    }
-    .nightshift-input:focus {
-      background: #fff;
-      color: #23272f;
-    }
-    .night-error { display:block;min-height:16px;color:#ff7070;font-size:0.98em; margin-bottom:0; margin-top:2px;}
-    @media (max-width:600px) {
-      .nightshift-group { flex-direction: column; gap: 10px;}
-      .nightshift-col { min-width: 0;}
-      .nightshift-input { padding: 16px 10px; font-size: 1.04rem; border-radius: 16px;}
-      .toggle-btns { flex-direction:column; gap:10px;}
-      button, .toggle-btn { width:100%; min-width:0;}
-    }
+/* ======= BUTTON (KIRA, PADAM, KEMBALI) ======= */
+.btn-group {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 10px;
+}
+button {
+  border: none;
+  outline: none;
+  min-width: 130px;
+  padding: 13px 0;
+  border-radius: 8px;
+  font-size: 1.04em;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background .15s, transform .15s;
+}
+button:active {
+  transform: scale(0.97);
+}
+.btn-green {
+  background: #31d0aa;
+  color: #fff;
+}
+.btn-green:hover {
+  background: #26b99b;
+}
+.btn-red {
+  background: #fff;
+  color: #d93c3c;
+  border: 1.5px solid #d93c3c;
+}
+.btn-red:hover {
+  background: #ffeaea;
+}
+.btn-back {
+  margin-top: 18px;
+  width: 100%;
+  background: #fff;
+  color: #31d0aa;
+  border: 1.5px solid #31d0aa;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 11px 0;
+}
+.btn-back:hover {
+  background: #dcfaef;
+}
+
+/* ======= OUTPUT CONTAINER/RESULT ======= */
+.output {
+  background: #f6f8fa;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #6fcaca08;
+}
+.output-title {
+  font-size: 1.12em;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.rowx {
+  display: flex;
+  justify-content: space-between;
+  margin: 2.5px 0;
+}
+.rowx.bold {
+  font-weight: 600;
+}
+.error-msg {
+  color: #d93c3c;
+  font-size: .97em;
+  margin-top: 8px;
+  min-height: 18px;
+  display: block;
+}
+
+/* ======= TOGGLE BUTTON BESAR ======= */
+.toggle-btns {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 7px;
+}
+.toggle-btn {
+  flex: 1;
+  padding: 23px 0;
+  border-radius: 16px;
+  font-size: 1.15em;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  box-shadow: 0 1px 5px #0001;
+  cursor: pointer;
+  transition: background .18s, color .15s, transform .12s;
+  margin-bottom: 0;
+  margin-top: 6px;
+  background: #ddd;
+  color: #fff;
+}
+.toggle-btn.green {
+  background: #11ca66;
+}
+.toggle-btn.red {
+  background: #ff4444;
+}
+.toggle-btn.active {
+  filter: brightness(0.93);
+  box-shadow: 0 1px 7px #0002;
+  transform: scale(0.96);
+}
+
+/* ======= RESPONSIVE ======= */
+@media(max-width:600px){
+  .toggle-btns {flex-direction:column; gap:12px;}
+  .toggle-btn {width:100%; min-width:0;}
+  .btn-group {flex-direction:column;}
+  button {width:100%; min-width:0;}
+}
+</style>
   </style>
 </head>
 <body>
@@ -190,10 +208,9 @@
         <input type="number" required id="gajiBasic" min="1" placeholder="Enter Salary Amount" autocomplete="off" oninput="semakGajiBasic()">
         <span id="basicError" class="error-msg"></span>
       </label>
-
-      <div class="toggle-row">
-        <div class="toggle-labelQ">Ada OT?</div>
-        <div class="toggle-btns" id="toggle-ot-btns">
+      <div>
+        <div style="font-weight:600;margin-top:15px;">Ada OT?</div>
+        <div class="toggle-btns">
           <button type="button" class="toggle-btn green" id="ot-yes">Ada</button>
           <button type="button" class="toggle-btn red" id="ot-no">Tiada</button>
         </div>
@@ -206,32 +223,26 @@
         <label style="margin-top:12px;"><span class="input-label">Jam OT 3X</span>
           <input type="number" id="ot3" min="0" autocomplete="off" placeholder="Total OT 3.0 hours"></label>
       </div>
-
-      <div class="toggle-row">
-        <div class="toggle-labelQ">Ada Night Shift?</div>
-        <div class="toggle-btns" id="toggle-night-btns">
+      <div>
+        <div style="font-weight:600;">Ada Night Shift?</div>
+        <div class="toggle-btns">
           <button type="button" class="toggle-btn green" id="night-yes">Ada</button>
           <button type="button" class="toggle-btn red" id="night-no">Tiada</button>
         </div>
       </div>
-      <div class="nightshift-section" id="nightshift-section" style="display:none;">
-        <label class="nightshift-label">
+      <div id="nightshift-section" style="display:none;margin-bottom:10px;background:#23272f;padding:17px 10px 20px 10px;border-radius:14px;">
+        <div style="color:#fff;font-size:1.07em;margin-bottom:8px;font-weight:600;">
           <span style="font-size:1.2em;vertical-align:-3px;">🌙</span> Night Shift
-        </label>
-        <div class="nightshift-group">
-          <div class="nightshift-col">
-            <label class="nightsmall-label" for="nightRate">Kadar satu malam (RM)</label>
-            <input type="number" id="nightRate" min="0" step="any" class="nightshift-input" placeholder="Enter Night Shift Rate (RM)" oninput="validateNightShift()">
-            <span id="nightRateError" class="night-error"></span>
-          </div>
-          <div class="nightshift-col">
-            <label class="nightsmall-label" for="nightDay">Bilangan hari night shift</label>
-            <input type="number" id="nightDay" min="0" step="1" class="nightshift-input" placeholder="Enter Total Night Shifts" oninput="validateNightShift()">
-            <span id="nightDayError" class="night-error"></span>
-          </div>
         </div>
+        <label style="color:#f0f0f0;">Kadar satu malam (RM)
+          <input type="number" id="nightRate" min="0" step="any" class="nightshift-input" placeholder="Enter Night Shift Rate (RM)">
+          <span id="nightRateError" class="night-error" style="color:#ffeaea;"></span>
+        </label>
+        <label style="color:#f0f0f0;margin-top:12px;">Bilangan hari night shift
+          <input type="number" id="nightDay" min="0" step="1" class="nightshift-input" placeholder="Enter Total Night Shifts">
+          <span id="nightDayError" class="night-error" style="color:#ffeaea;"></span>
+        </label>
       </div>
-
       <div class="btn-group">
         <button type="submit" class="btn-green">Kira</button>
         <button type="button" class="btn-red" onclick="resetForm()">Padam</button>
@@ -241,84 +252,41 @@
   <div id="result-view"></div>
 </div>
 <script>
+// ====== BUTTON BEHAVIOUR ======
 let lastInput = {
     gajiBasic: "", ot15: "", ot2: "", ot3: "", nightRate: "", nightDay: ""
 };
-
-// Motion toggle button OT
 const otYes = document.getElementById("ot-yes");
 const otNo = document.getElementById("ot-no");
 const otSection = document.getElementById("ot-section");
-
-function showOT() {
-  otSection.style.display = "block";
-  otSection.classList.remove('slide-fade-out');
-  otSection.classList.add('slide-fade-in');
-  otYes.classList.add("active");
-  otNo.classList.remove("active");
-}
-function hideOT() {
-  otSection.classList.remove('slide-fade-in');
-  otSection.classList.add('slide-fade-out');
-  setTimeout(() => { otSection.style.display = "none"; }, 350);
-  otNo.classList.add("active");
-  otYes.classList.remove("active");
+otNo.classList.add("active");
+otSection.style.display = "none";
+otYes.onclick = function(){ otSection.style.display="block"; otYes.classList.add("active"); otNo.classList.remove("active");};
+otNo.onclick = function(){ otSection.style.display="none"; otNo.classList.add("active"); otYes.classList.remove("active");
   document.getElementById('ot15').value = "";
   document.getElementById('ot2').value = "";
   document.getElementById('ot3').value = "";
-}
-// Default: tiada selected
-otNo.classList.add("active");
-otSection.style.display = "none";
-otYes.addEventListener('click',showOT);
-otNo.addEventListener('click',hideOT);
-
-// Motion toggle button Night
+};
 const nightYes = document.getElementById("night-yes");
 const nightNo = document.getElementById("night-no");
 const nightSection = document.getElementById("nightshift-section");
-function showNight() {
-  nightSection.style.display = "block";
-  nightSection.classList.remove('slide-fade-out');
-  nightSection.classList.add('slide-fade-in');
-  nightYes.classList.add("active");
-  nightNo.classList.remove("active");
-}
-function hideNight() {
-  nightSection.classList.remove('slide-fade-in');
-  nightSection.classList.add('slide-fade-out');
-  setTimeout(() => { nightSection.style.display = "none"; }, 350);
-  nightNo.classList.add("active");
-  nightYes.classList.remove("active");
+nightNo.classList.add("active");
+nightSection.style.display = "none";
+nightYes.onclick = function(){ nightSection.style.display="block"; nightYes.classList.add("active"); nightNo.classList.remove("active");};
+nightNo.onclick = function(){ nightSection.style.display="none"; nightNo.classList.add("active"); nightYes.classList.remove("active");
   document.getElementById('nightRate').value = "";
   document.getElementById('nightDay').value = "";
   document.getElementById('nightRateError').textContent = '';
   document.getElementById('nightDayError').textContent = '';
-}
-// Default
-nightNo.classList.add("active");
-nightSection.style.display = "none";
-nightYes.addEventListener('click',showNight);
-nightNo.addEventListener('click',hideNight);
+};
 
 function semakGajiBasic() {
   let basicInput = document.getElementById('gajiBasic');
   let errorMsg = document.getElementById('basicError');
   let val = parseFloat(basicInput.value);
-
-  if (basicInput.value === "") {
-    errorMsg.textContent = "Sila masukkan gaji asas anda.";
-    basicInput.value = "";
-    return false;
-  }
-  if (isNaN(val) || val < 1) {
-    errorMsg.textContent = "Gaji asas mesti sekurang-kurangnya RM1.";
-    basicInput.value = "";
-    return false;
-  } else {
-    errorMsg.textContent = "";
-    return true;
-  }
+  if (basicInput.value === "") { errorMsg.textContent = "Sila masukkan gaji asas anda."; basicInput.value = ""; return false; }
+  if (isNaN(val) || val < 1) { errorMsg.textContent = "Gaji asas mesti sekurang-kurangnya RM1."; basicInput.value = ""; return false; }
+  else { errorMsg.textContent = ""; return true; }
 }
 function validateNightShift() {
   if (nightSection.style.display === "none") return true;
@@ -326,27 +294,17 @@ function validateNightShift() {
   const day = document.getElementById('nightDay').value.trim();
   let isValid = true;
   let rateError = "", dayError = "";
-
-  if (rate && !day) {
-    dayError = "Wajib isi Bilangan Hari";
-    isValid = false;
-  }
-  if (day && !rate) {
-    rateError = "Wajib isi Kadar satu malam";
-    isValid = false;
-  }
+  if (rate && !day) { dayError = "Wajib isi Bilangan Hari"; isValid = false; }
+  if (day && !rate) { rateError = "Wajib isi Kadar satu malam"; isValid = false; }
   document.getElementById('nightRateError').textContent = rateError;
   document.getElementById('nightDayError').textContent = dayError;
   return isValid;
 }
 document.getElementById('formGaji').addEventListener('submit', function(e){
     e.preventDefault();
-    if(!semakGajiBasic()){
-        document.getElementById('gajiBasic').focus();
-        return false;
-    }
-    if (!validateNightShift()) {
-      if (!document.getElementById('nightRate').value) document.getElementById('nightRate').focus();
+    if(!semakGajiBasic()){ document.getElementById('gajiBasic').focus(); return false; }
+    if(!validateNightShift()){
+      if(!document.getElementById('nightRate').value) document.getElementById('nightRate').focus();
       else document.getElementById('nightDay').focus();
       return false;
     }
@@ -368,7 +326,6 @@ document.getElementById('formGaji').addEventListener('submit', function(e){
 
     let gajiHari = gajiBasic / 26;
     let gajiJam = gajiHari / 8;
-
     let otAmt1 = gajiJam * 1.5 * ot15;
     let otAmt2 = gajiJam * 2.0 * ot2;
     let otAmt3 = gajiJam * 3.0 * ot3;
@@ -383,6 +340,8 @@ document.getElementById('formGaji').addEventListener('submit', function(e){
     let sipPekerja = carumanBase * 0.002;
     let sipMajikan = carumanBase * 0.002;
     let gajiBersih = gajiKasar - (epfPekerja + socsoPekerja + sipPekerja);
+
+    window.gajiBersihToTransfer = gajiBersih;
 
     document.getElementById('form-view').style.display = 'none';
     document.getElementById('result-view').innerHTML = `
@@ -413,11 +372,16 @@ document.getElementById('formGaji').addEventListener('submit', function(e){
         <div class="rowx summary" style="color:#175e36; margin-top:22px;"><span><b>Gaji Bersih</b></span> <span><b>RM${gajiBersih.toFixed(2)}</b></span></div>
         <hr>
         <button onclick="doPrint()" type="button" class="btn-green" style="width:100%;">Cetak</button>
+        <button onclick="goToBajet()" type="button" class="btn-green" style="width:100%;background:#098f66;margin-top:10px;font-size:1.07em;">Terus ke Kalkulator Bajet</button>
         <button onclick="showFormAgain()" type="button" class="btn-back">Kembali ke Borang</button>
       </div>
     `;
     document.getElementById('result-view').style.display = 'block';
 });
+function goToBajet() {
+  let gajiBersih = window.gajiBersihToTransfer || 0;
+  window.open("https://pwntable.github.io/kalkulator-bajet/?gaji="+encodeURIComponent(gajiBersih.toFixed(2)),"_blank");
+}
 function showFormAgain(){
     document.getElementById('result-view').style.display = 'none';
     document.getElementById('form-view').style.display = 'block';
@@ -428,19 +392,12 @@ function showFormAgain(){
     document.getElementById('nightRate').value = lastInput.nightRate;
     document.getElementById('nightDay').value  = lastInput.nightDay;
     document.getElementById('gajiBasic').focus();
-    // restore button state based on input
     let otAny = lastInput.ot15 || lastInput.ot2 || lastInput.ot3;
-    if(otAny){
-      showOT(); otYes.classList.add('active');
-    }else{
-      hideOT();
-    }
+    if(otAny){ otSection.style.display="block"; otYes.classList.add('active'); otNo.classList.remove('active'); }
+    else{ otSection.style.display="none"; otNo.classList.add('active'); otYes.classList.remove('active'); }
     let nightAny = lastInput.nightRate || lastInput.nightDay;
-    if(nightAny){
-      showNight(); nightYes.classList.add('active');
-    }else{
-      hideNight();
-    }
+    if(nightAny){ nightSection.style.display="block"; nightYes.classList.add('active'); nightNo.classList.remove('active'); }
+    else{ nightSection.style.display="none"; nightNo.classList.add('active'); nightYes.classList.remove('active'); }
 }
 function doPrint() {
   let output = document.querySelector('.output').cloneNode(true);
@@ -470,8 +427,8 @@ function resetForm() {
   document.getElementById('basicError').textContent = '';
   document.getElementById('nightRateError').textContent = '';
   document.getElementById('nightDayError').textContent = '';
-  hideOT();
-  hideNight();
+  otSection.style.display="none"; otNo.classList.add('active'); otYes.classList.remove('active');
+  nightSection.style.display="none"; nightNo.classList.add('active'); nightYes.classList.remove('active');
 }
 </script>
 </body>
