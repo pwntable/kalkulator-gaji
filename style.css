@@ -1,0 +1,190 @@
+/* ======= LAYOUT & STRUKTUR UTAMA ======= */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #f6f6f8;
+  font-family: 'Inter', Arial, sans-serif;
+  color: #212432;
+}
+.container {
+  max-width: 410px;
+  margin: 50px auto;
+  padding: 24px 22px 20px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px #26296e09;
+  min-height: 250px;
+}
+h2 {
+  margin: 0 0 24px 0;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  text-align: center;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ======= INPUT + LABEL ======= */
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  font-weight: 500;
+  gap: 6px;
+  color: #444;
+}
+.input-label {
+  margin-bottom: 2px;
+  font-weight: 600;
+}
+.required-star {
+  color: #d93c3c;
+  font-weight: bold;
+  margin-left: 2px;
+  font-size: 1.1em;
+}
+
+/* ======= FIELD INPUT ======= */
+input[type=number], input[type=text] {
+  padding: 10px 12px;
+  border: 1.5px solid #e2e3e4;
+  border-radius: 8px;
+  outline: none;
+  font-size: 1rem;
+  background: #f6f8fa;
+  color: #212432;
+  box-shadow: 0 1px 5px #0001;
+  transition: border .2s, box-shadow .18s;
+}
+input[type=number]:focus,
+input[type=text]:focus {
+  border: 1.5px solid #31d0aa;
+  background: #fff;
+  color: #212432;
+  box-shadow: 0 0 0 2px #31d0aa33;
+}
+
+/* ======= BUTTON (KIRA, PADAM, KEMBALI) ======= */
+.btn-group {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 10px;
+}
+button {
+  border: none;
+  outline: none;
+  min-width: 130px;
+  padding: 13px 0;
+  border-radius: 8px;
+  font-size: 1.04em;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background .15s, transform .15s;
+}
+button:active {
+  transform: scale(0.97);
+}
+.btn-green {
+  background: #31d0aa;
+  color: #fff;
+}
+.btn-green:hover {
+  background: #26b99b;
+}
+.btn-red {
+  background: #fff;
+  color: #d93c3c;
+  border: 1.5px solid #d93c3c;
+}
+.btn-red:hover {
+  background: #ffeaea;
+}
+.btn-back {
+  margin-top: 18px;
+  width: 100%;
+  background: #fff;
+  color: #31d0aa;
+  border: 1.5px solid #31d0aa;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 11px 0;
+}
+.btn-back:hover {
+  background: #dcfaef;
+}
+
+/* ======= OUTPUT CONTAINER/RESULT ======= */
+.output {
+  background: #f6f8fa;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #6fcaca08;
+}
+.output-title {
+  font-size: 1.12em;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.rowx {
+  display: flex;
+  justify-content: space-between;
+  margin: 2.5px 0;
+}
+.rowx.bold {
+  font-weight: 600;
+}
+.error-msg {
+  color: #d93c3c;
+  font-size: .97em;
+  margin-top: 8px;
+  min-height: 18px;
+  display: block;
+}
+
+/* ======= TOGGLE BUTTON BESAR ======= */
+.toggle-btns {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 7px;
+}
+.toggle-btn {
+  flex: 1;
+  padding: 23px 0;
+  border-radius: 16px;
+  font-size: 1.15em;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  box-shadow: 0 1px 5px #0001;
+  cursor: pointer;
+  transition: background .18s, color .15s, transform .12s;
+  margin-bottom: 0;
+  margin-top: 6px;
+  background: #ddd;
+  color: #fff;
+}
+.toggle-btn.green {
+  background: #11ca66;
+}
+.toggle-btn.red {
+  background: #ff4444;
+}
+.toggle-btn.active {
+  filter: brightness(0.93);
+  box-shadow: 0 1px 7px #0002;
+  transform: scale(0.96);
+}
+
+/* ======= RESPONSIVE ======= */
+@media(max-width:600px){
+  .toggle-btns {flex-direction:column; gap:12px;}
+  .toggle-btn {width:100%; min-width:0;}
+  .btn-group {flex-direction:column;}
+  button {width:100%; min-width:0;}
+}
